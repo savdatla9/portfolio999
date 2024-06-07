@@ -1,0 +1,7 @@
+.view-surface{
+    width: 45vw;
+    height: 35vh;
+    border-radius: 5px;
+    background-color: #252a2e !important;
+    z-index: 50 !important;
+}
