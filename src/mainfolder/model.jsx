@@ -2,8 +2,8 @@ import React, { useRef, useEffect } from 'react';
 
 import * as THREE from 'three';
 import { 
-    useGLTF, useAnimations, useTexture, 
-    MeshReflectorMaterial, MeshWobbleMaterial,
+    useGLTF, useAnimations,
+    MeshWobbleMaterial,
 } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 
@@ -12,38 +12,39 @@ export function Avatar(props) {
 
     const { animations } = useGLTF('/animations.glb');
 
-    const [gmap, gdMap, gnMap, grMap, gaoMap] = useTexture([
-        '/textures/grass_texture/aerial_grass_rock_diff_4k.jpg',
-        '/textures/grass_texture/aerial_grass_rock_disp_4k.jpg',
-        '/textures/grass_texture/aerial_grass_rock_nor_gl_4k.jpg',
-        '/textures/grass_texture/aerial_grass_rock_rough_4k.jpg',
-        '/textures/grass_texture/aerial_grass_rock_ao_4k.jpg',
-    ]);
+    // const [gmap, gdMap, gnMap, grMap, gaoMap] = useTexture([
+    //     '/textures/grass_texture/aerial_grass_rock_diff_4k.jpg',
+    //     '/textures/grass_texture/aerial_grass_rock_disp_4k.jpg',
+    //     '/textures/grass_texture/aerial_grass_rock_nor_gl_4k.jpg',
+    //     '/textures/grass_texture/aerial_grass_rock_rough_4k.jpg',
+    //     '/textures/grass_texture/aerial_grass_rock_ao_4k.jpg',
+    // ]);
 
+    const tilesMap = useLoader(THREE.TextureLoader, './textures/groundmaterial.jpeg');
     const colorMap = useLoader(THREE.TextureLoader, '/textures/waternormals.jpeg');
 
     const groupRef = useRef();
 
     const { actions, mixer } = useAnimations(animations, groupRef);
 
-    const length = 0.01, width = 0.005;
+    // const length = 0.01, width = 0.005;
 
-    const shape = new THREE.Shape();
-    shape.moveTo( 0,0 );
-    shape.lineTo( 0, width );
-    shape.lineTo( length, width );
-    shape.lineTo( length, 0 );
-    shape.lineTo( 0, 0 );
+    // const shape = new THREE.Shape();
+    // shape.moveTo( 0,0 );
+    // shape.lineTo( 0, width );
+    // shape.lineTo( length, width );
+    // shape.lineTo( length, 0 );
+    // shape.lineTo( 0, 0 );
 
-    const extrudeSettings = {
-        steps: 1,
-        depth: 3,
-        bevelEnabled: true,
-        bevelThickness: 1,
-        bevelSize: 1,
-        bevelOffset: 0,
-        bevelSegments: 1
-    };
+    // const extrudeSettings = {
+    //     steps: 1,
+    //     depth: 3,
+    //     bevelEnabled: true,
+    //     bevelThickness: 1,
+    //     bevelSize: 1,
+    //     bevelOffset: 0,
+    //     bevelSegments: 1
+    // };
 
     useEffect(() => {
         actions[animations[0].name]
@@ -54,8 +55,8 @@ export function Avatar(props) {
     }, [animations[0].name]);
 
     return (
-        <>
-            <group {...props} ref={groupRef} dispose={null} castShadow receiveShadow>
+        <group  {...props}>
+            <group ref={groupRef} dispose={null} castShadow receiveShadow>
                 <primitive object={nodes.Hips} />
                 <skinnedMesh
                     name="EyeLeft"
@@ -124,30 +125,31 @@ export function Avatar(props) {
                 />
             </group>
 
-            <mesh position={[0.5, 0, 0.2]} rotation={[Math.PI/2, 0, 0]} scale={[0.05, 0.05, 0.035]} castShadow receiveShadow>
+            {/* <mesh position={[0.5, 0, 0.2]} rotation={[Math.PI/2, 0, 0]} scale={[0.05, 0.05, 0.035]} castShadow receiveShadow>
                 <extrudeGeometry args={[shape, extrudeSettings]} />
                 <MeshReflectorMaterial 
                     color="#FFD700" 
                 />
-            </mesh>
+            </mesh> */}
 
-            <mesh position={[-0.5, 0, 0]} castShadow receiveShadow>
-                <boxGeometry args={[0.2, 0.2, 0.2]} />
+            <mesh position={[-0.5, 0.5, 0]} scale={0.01} castShadow receiveShadow>
+                <sphereGeometry args={[15, 32, 16]} />
                 <MeshWobbleMaterial 
-                    speed={0.5} factor={4} normalScale={3}
-                    color={'dodgerblue'} normalMap={colorMap}
+                    speed={2} factor={1}
+                    normalScale={5} normalMap={colorMap}
+                    color={'limegreen'} emissive={'black'}
+                    metalness={2.5} isMeshStandardMaterial={true}
                 />
             </mesh>
             
-            <mesh position={[0, -0.13, 0]} rotation={[0, 0, 0]}>
-                <cylinderGeometry args={[1.5, 1.5, 0.05, 32]} />
+            <mesh position={[0, -0.65, 0]} rotation={[Math.PI/2, 0, 0]}>
+                <boxGeometry args={[1.5, 1.5, 1.15]} />
                 <meshStandardMaterial 
-                    side={THREE.DoubleSide} map={gmap} 
-                    normalMap={gnMap} roughnessMap={grMap}
-                    normalScale={2} roughness={7}
+                    side={THREE.DoubleSide} 
+                    map={tilesMap}
                 />
             </mesh>
-        </>
+        </group>
     );
 };
 

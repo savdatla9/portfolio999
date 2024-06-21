@@ -12,6 +12,7 @@ import './App.css';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import Header from './header';
 import Home from './mainfolder/home';
 import Auth from './mainfolder/login';
 import VideoCall from './videocallfolder/index';
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div className="App">
+      <Header />
       <PrimeReactProvider>
         <RouterProvider router={router} />
       </PrimeReactProvider>
