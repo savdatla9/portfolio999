@@ -7,10 +7,9 @@ import {
 
 import { PrimeReactProvider } from 'primereact/api';
 
-import './App.css';
+import { ToastContainer } from 'react-toastify';
 
-import "primereact/resources/themes/lara-light-cyan/theme.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
 import Header from './header';
 import Home from './mainfolder/home';
@@ -25,6 +24,9 @@ const router = createBrowserRouter([
     path: '/login',
     element: <Auth />,
   }, {
+    path: '/signup',
+    element: <Auth />,
+  }, {
     path: '/videocall',
     element: <VideoCall />
   },
@@ -37,6 +39,7 @@ function App() {
       <Header />
       <PrimeReactProvider>
         <RouterProvider router={router} />
+        <ToastContainer autoClose={5000} theme={'colored'} />
       </PrimeReactProvider>
     </div>
   );
